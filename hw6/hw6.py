@@ -37,7 +37,7 @@ def write_ans(test, label, outputs_dir):
                 
 def read_test(testfile):
     print('Reading Testing File ...')
-    df = pd.read_csv('test_case.csv')
+    df = pd.read_csv(testfile)
     img1 = df['image1_index']
     img2 = df['image2_index']
     test = np.vstack((np.array(img1), np.array(img2))).T
