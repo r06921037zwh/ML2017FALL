@@ -14,13 +14,14 @@ import pandas as pd
 import pickle
 import os
 import csv
+import sys
 import jieba
 jieba.set_dictionary('dict.txt.big.txt')
 
 DICT_SIZE = 30000
 EMBEDDING_SIZE = 1024
 
-
+'''
 def read_file():
     print ('Loading training data ...')
     lines = []
@@ -63,7 +64,8 @@ def build_w2v_model(container_w2v, model_index):
     print("Saving the word2vec model ...")
     save_place = path_pos(model_index,'False', 'True')
     w2v_model.save(save_place)
-   
+ 
+
 def make_dict(container_dic, stopwords, freq, model_index):
     load_place = path_pos(model_index,'False', 'True')
     model = word2vec.Word2Vec.load(load_place)  
@@ -87,8 +89,14 @@ def make_dict(container_dic, stopwords, freq, model_index):
     pickle.dump(dictionary, open(path, 'wb'))
     return dictionary
 
+def load_dict(model_index):
+    print("Getting the dictionary ...")
+    load_place = path_pos(model_index,'True', 'False')
+    path = os.path.join(load_place,'dictionary')
+    dictionary = pickle.load('dictionary', open(path, 'rb'))
+    return dictionary
 
-'''
+
 def make_dict(container_dic, stopwords, freq, model_index):
     load_place = path_pos(model_index,'False', 'True')
     model = word2vec.Word2Vec.load(load_place) 
@@ -105,9 +113,9 @@ def make_dict(container_dic, stopwords, freq, model_index):
     return dictionary
 '''
     
-def read_test():
+def read_test(fname):
     print("Loading testing file ... ")
-    df = pd.read_csv('testing_data.csv', dtype=str)
+    df = pd.read_csv(fname, dtype=str)
     df_question = df['dialogue'].values
     df_answer = df['options'].values
     
@@ -278,33 +286,30 @@ def path_pos(index, directory, model):
     
 def main():
     # train the word2vec
-    sentences, stopwords = read_file()
-    container_w2v, container_dic = preprocess(sentences)
+    #sentences, stopwords = read_file()
+    #container_w2v, container_dic = preprocess(sentences)
     
     # read in testfile
-    questions, answers = read_test() 
+    questions, answers = read_test(sys.argv[1]) 
     #build_w2v_model(container_w2v, model_index)
     
     # model 2 
-    model_index = 2
-    dictionary = make_dict(container_dic, stopwords, DICT_SIZE, model_index)
+    dictionary = pickle.load(open('dictionary_2', 'rb'))
     q_vec, a_vec = word_to_vec(questions, answers, dictionary)   
     dist1 = np.array(cal_dist(q_vec, a_vec))
     
     # model 3 
-    model_index = 3
-    dictionary = make_dict(container_dic, stopwords, DICT_SIZE, model_index)
+    dictionary = pickle.load(open('dictionary_3', 'rb'))
     q_vec, a_vec = word_to_vec(questions, answers, dictionary)   
     dist2 = np.array(cal_dist(q_vec, a_vec))
     
     # model 4 
-    model_index = 4
-    dictionary = make_dict(container_dic, stopwords, DICT_SIZE, model_index)
+    dictionary = pickle.load(open('dictionary_4', 'rb'))
     q_vec, a_vec = word_to_vec(questions, answers, dictionary)   
     dist3 = np.array(cal_dist(q_vec, a_vec))
 
     dist = dist1 + dist2 + dist3
-    write_ans(dist, 'Prediction.csv')
+    write_ans(dist, sys.argv[2])
     
 if __name__ == '__main__':
     main()
