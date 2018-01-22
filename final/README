@@ -1,0 +1,15 @@
+(1) Environments: python3.5.4, numpy1.11.3, pandas0.21.0, jieba0.39, gensim3.1.0
+
+(2) Import packages:
+pickle, csv, jieba, pandas, multiprocessing,
+gensim.models.word2vec,
+numpy.linalg.norm,
+collections.Counter
+
+(3) Usage:
+bash final.sh <testing_data> <prediction file>
+
+testing_data: testing data的路徑 （testing_data.csv)
+prediction file: 結果的csv檔路徑
+
+
