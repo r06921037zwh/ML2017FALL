@@ -1,5 +1,5 @@
 ## ML2017FALL 
-## Instructor Hung-yi Lee [http://speech.ee.ntu.edu.tw/~tlkagk/](http://speech.ee.ntu.edu.tw/~tlkagk/)
+## Instructor  [Hung-yi Lee](http://speech.ee.ntu.edu.tw/~tlkagk/)
 ### HW1 Linear Regression
 ### HW2 Logistic Regression
 ### HW3 Convolution Neural Network Implementation
